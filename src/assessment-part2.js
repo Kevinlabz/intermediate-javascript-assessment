@@ -36,16 +36,38 @@ var firstUser = 'don\'t touch this string!';
 var thirdUser = 'don\'t touch this string, either!';
 
 function noWeakLink() {
+  var tempTenth;
 
   var promise = $http({
     method: 'GET',
     url: '/api/users'
-  })
+  });
   // CODE HERE...
+  promise.then(function (result) {
+    console.log('Showing the result for noWeakLink: ', result);
+    var tempArr = result.data;
+    console.log(tempArr);
+    firstUser = tempArr[0];
+    console.log('Showing first user: ', firstUser);
+  });
 
+  return promise.then(function (result) {
+    console.log('Showing the result for noWeakLink: ', result);
+    var tempArr = result.data;
+    console.log(tempArr);
+    thirdUser = tempArr[2];
+    console.log('Showing thirdUser: ', thirdUser);
+    return tempArr[9];
+  });
 
-  return promise;
+  // console.log('Showing first user: ', firstUser);
+  // console.log('Showing thirdUser: ', thirdUser);
+
+  // return tempTenth;
 }
+
+console.log('End of function first user: ', firstUser);
+console.log('End of function thirdUser: ', thirdUser);
 
 
 
@@ -67,13 +89,14 @@ function noWeakLink() {
 
 var elephant = {
   name: 'Horton'
-}
-function large() {
+};
 
+function large() {
   return 'My name is ' + this.name + ' and I am very heavy!'
 }
 // CODE HERE...
-
+var boundToElephant = large.bind(elephant);
+console.log('Showing elephant val: ' + boundToElephant());
 
 
 // *************
@@ -87,6 +110,11 @@ function large() {
 
 // CODE HERE...
 
+function deathStar(capacity, crew) {
+  console.log('Showing capacity: ', capacity);
+  console.log('Showing capacity: ', crew);
+  return capacity.bind(crew);
+}
 
 
 // *************
@@ -101,6 +129,11 @@ function large() {
 // The closure function will returns the combined value of assets and liabilities.
 
 // CODE HERE...
+function accountingOffice(assets) {
+  return function (liabilities) {
+    return assets + liabilities;
+  };
+}
 
 
 
@@ -127,7 +160,22 @@ function large() {
 
 // CODE HERE...
 
+function forgetter(name) {
+  var tempArray = [];
 
+  function rememberall(item) {
+    tempArray.push(item);
+    return {
+      name: name,
+      remember: tempArray
+    };
+  }
+  return rememberall;
+}
+var temp = forgetter('kevin');
+temp('test');
+temp('test2');
+console.log('Showing forgetter func: ', temp('test3'));
 
 // *************
 // * PROBLEM 6 *
@@ -154,3 +202,45 @@ function large() {
 // NOTE: Neither hunger nor danger should be able to exceed 100 or drop below 0.
 
 // CODE HERE...
+
+function frodo(startingHungerValue, startingDangerValue) {
+  var hungerVal = startingHungerValue;
+  var dangerVal = startingDangerValue;
+
+  console.log('Showing hungerval: ', hungerVal);
+  console.log('Showing dangerVal: ', dangerVal);
+
+  return {
+    dinnerOverFire: function () {
+      hungerVal -= 25;
+      if (hungerVal < 0) {
+        hungerVal = 0;
+      }
+      dangerVal += 40;
+      if (dangerVal > 100) {
+        dangerVal = 100;
+      }
+
+      return {
+        hunger: hungerVal,
+        danger: dangerVal
+      };
+    },
+    hidingInBush: function () {
+      hungerVal += 35;
+      if (hungerVal > 100) {
+        hungerVal = 100;
+      }
+
+      dangerVal -= 20;
+      if (dangerVal < 0) {
+        dangerVal = 0;
+      }
+
+      return {
+        hunger: hungerVal,
+        danger: dangerVal
+      };
+    }
+  };
+}
